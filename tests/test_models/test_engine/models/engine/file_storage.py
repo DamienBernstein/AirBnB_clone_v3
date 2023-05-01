@@ -77,7 +77,7 @@ class FileStorage:
         key = "{}.{}".format(cls.__name__, id)
         return self.__objects.get(key) 
 
-     def count(self, cls=None):
+    def count(self, cls=None):
         """
         Returns the number of objects in storage matching the given class. If no class
         is passed, returns the count of all objects in storage.
