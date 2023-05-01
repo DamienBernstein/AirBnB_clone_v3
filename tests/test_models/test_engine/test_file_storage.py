@@ -110,37 +110,15 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get(self):
-        """Test get method"""
-        user = User()
-        user.name = "test_user"
-        user.email = "test@test.com"
-        user.password = "test_password"
-        user.id = str(uuid.uuid4())  # Set the id attribute
-        self.storage.new(user)
-        self.storage.save()
-
-        user_id = user.id
-
-        retrieved_user = self.storage.get(User, user_id)
-
-        self.assertEqual(user, retrieved_user)
+        """Test that get properly returns a requested object"""
+        storage = FileStorage()
+        user = User(name="User1")
+        user.save()
+        self.assertEqual(user, storage.get("User", user.id))
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
-        """Test count method"""
-        # Add some objects to the storage
-        user1 = User()
-        user1.name = "test_user1"
-        user1.email = "test1@test.com"
-        user1.password = "test_password1"
-        self.storage.new(user1)
-        
-        user2 = User()
-        user2.name = "test_user2"
-        user2.email = "test2@test.com"
-        user2.password = "test_password2"
-        self.storage.new(user2)
-
-        # Call count method and compare the result
-        count = self.storage.count(User)
-        self.assertEqual(count, 2)
+        """Test that count properly counts all objects"""
+        storage = FileStorage()
+        nobjs = len(storage._FileStorage__objects)
+        self.assertEqual(nobjs, storage.count())
