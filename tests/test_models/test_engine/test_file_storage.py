@@ -116,15 +116,35 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get(self):
-        """Test that get properly returns a requested object"""
-        storage = FileStorage()
-        user = User(name="User1")
-        user.save()
-        self.assertEqual(user, storage.get("User", user.id))
+        user = User(email='test@gmail.com', password='password')
+        self.session.add(user)
+        self.session.commit()
+
+        obj = self.storage.get(User, user.id)
+        self.assertEqual(obj, user)
+
+        obj = self.storage.get(User, "nonexistent_id")
+        self.assertIsNone(obj)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
-        """Test that count properly counts all objects"""
-        storage = FileStorage()
-        nobjs = len(storage._FileStorage__objects)
-        self.assertEqual(nobjs, storage.count())
+        user1 = User(email='test1@gmail.com', password='password')
+        user2 = User(email='test2@gmail.com', password='password')
+        self.session.add(user1)
+        self.session.add(user2)
+        self.session.commit()
+
+        # count all objects
+        count = self.storage.count()
+        self.assertEqual(count, 2)
+
+        # count specific class objects
+        count = self.storage.count(User)
+        self.assertEqual(count, 2)
+
+        # count non-existent class objects
+        class NonExistent:
+            pass
+
+        count = self.storage.count(NonExistent)
+        self.assertEqual(count, 0)
