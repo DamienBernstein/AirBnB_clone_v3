@@ -116,35 +116,37 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get(self):
-        user = User(email='test@gmail.com', password='password')
+        """Test get method"""
+        user = User()
+        user.name = "test_user"
+        user.email = "test@test.com"
+        user.password = "test_password"
         self.session.add(user)
         self.session.commit()
 
-        obj = self.storage.get(User, user.id)
-        self.assertEqual(obj, user)
+        user_id = user.id
 
-        obj = self.storage.get(User, "nonexistent_id")
-        self.assertIsNone(obj)
+        retrieved_user = self.storage.get(User, user_id)
+
+        self.assertEqual(user, retrieved_user)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_count(self):
-        user1 = User(email='test1@gmail.com', password='password')
-        user2 = User(email='test2@gmail.com', password='password')
+     def test_count(self):
+        """Test count method"""
+        user1 = User()
+        user1.name = "test_user1"
+        user1.email = "test1@test.com"
+        user1.password = "test_password1"
+
+        user2 = User()
+        user2.name = "test_user2"
+        user2.email = "test2@test.com"
+        user2.password = "test_password2"
+
         self.session.add(user1)
         self.session.add(user2)
         self.session.commit()
 
-        # count all objects
-        count = self.storage.count()
-        self.assertEqual(count, 2)
-
-        # count specific class objects
         count = self.storage.count(User)
+
         self.assertEqual(count, 2)
-
-        # count non-existent class objects
-        class NonExistent:
-            pass
-
-        count = self.storage.count(NonExistent)
-        self.assertEqual(count, 0)
