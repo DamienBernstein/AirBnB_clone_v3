@@ -4,6 +4,7 @@ Contains the TestFileStorageDocs classes
 """
 
 from datetime import datetime
+from uuid import UUID
 import inspect
 import models
 from models.engine import file_storage
@@ -121,12 +122,12 @@ class TestFileStorage(unittest.TestCase):
         user.name = "test_user"
         user.email = "test@test.com"
         user.password = "test_password"
-        self.session.add(user)
-        self.session.commit()
+        models.storage.new(user)
+        models.storage.save()
 
         user_id = user.id
 
-        retrieved_user = self.storage.get(User, user_id)
+        retrieved_user = models.storage.get(User, user_id)
 
         self.assertEqual(user, retrieved_user)
 
@@ -143,10 +144,10 @@ class TestFileStorage(unittest.TestCase):
         user2.email = "test2@test.com"
         user2.password = "test_password2"
 
-        self.session.add(user1)
-        self.session.add(user2)
-        self.session.commit()
+       models.storage.new(user1)
+       models.storage.new(user2)
+       models.storage.save()
 
-        count = self.storage.count(User)
+       count = models.storage.count(User)
 
-        self.assertEqual(count, 2)
+       self.assertEqual(count, 2)
