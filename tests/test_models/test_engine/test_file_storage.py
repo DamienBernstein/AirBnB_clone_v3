@@ -73,19 +73,6 @@ test_file_storage.py'])
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    
-    @classmethod
-    def setUpClass(cls):
-        cls.storage = FileStorage()
-        cls.storage.reload()
-
-    def setUp(self):
-        self.user1 = User()
-        self.user1.email = "test1@test.com"
-        self.user1.password = "password1"
-        self.storage.new(self.user1)
-
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_new(self):
         """test that new adds an object to the FileStorage.__objects attr"""
         storage = FileStorage()
