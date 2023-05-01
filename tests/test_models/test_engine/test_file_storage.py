@@ -127,7 +127,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsNone(obj)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_count(self):
+     def test_count(self):
         user1 = User(email='test1@gmail.com', password='password')
         user2 = User(email='test2@gmail.com', password='password')
         self.session.add(user1)
