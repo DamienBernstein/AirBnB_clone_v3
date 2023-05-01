@@ -144,10 +144,10 @@ class TestFileStorage(unittest.TestCase):
         user2.email = "test2@test.com"
         user2.password = "test_password2"
 
-       models.storage.new(user1)
-       models.storage.new(user2)
-       models.storage.save()
+        models.storage.new(user1)
+        models.storage.new(user2)
+        models.storage.save()
 
-       count = models.storage.count(User)
+        count = models.storage.count(User)
 
-       self.assertEqual(count, 2)
+        self.assertEqual(count, 2)
